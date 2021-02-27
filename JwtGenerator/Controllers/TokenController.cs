@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using JwtGenerator.DTO;
+using JwtGenerator.Service;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +10,22 @@ namespace JwtGenerator.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TokenController : Controller
+    public class TokenController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult Index()
+        private readonly TokenService _tokenService;
+        public TokenController(TokenService tokenService)
         {
-            return View();
+            _tokenService = tokenService;
+        }
+
+        [HttpPost]
+        public ActionResult Index([FromBody] CreateTokenDTO dto)
+        {
+            var result = _tokenService.CreateToken(dto);
+            if (result.Success)
+                return Ok(result.Data);
+
+            return Problem(detail: result.Data);
         }
     }
 }
