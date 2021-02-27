@@ -1,12 +1,9 @@
 ﻿using JwtGenerator.DTO;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace JwtGenerator.Service
 {
@@ -28,8 +25,11 @@ namespace JwtGenerator.Service
             if (!(dto.Time > 0) || dto.Time > 86400)
                 response.Data += "Time is requerid. (between 1 and 86400). ";
 
-            //if (String.IsNullOrWhiteSpace(dto.Password))
-            //    response.Data += "Password is requerid. \n";
+            if (String.IsNullOrWhiteSpace(dto.Audience))
+                response.Data += "Audience is requerid. ";
+
+            if (String.IsNullOrWhiteSpace(dto.Issuer))
+                response.Data += "Issuer is requerid. ";
 
             if (!String.IsNullOrWhiteSpace(response.Data))
             {
@@ -47,10 +47,12 @@ namespace JwtGenerator.Service
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                    new Claim(ClaimTypes.Name, dto.Name),
-                    new Claim(ClaimTypes.Email, dto.Email)
+                        new Claim(ClaimTypes.Name, dto.Name),
+                        new Claim(ClaimTypes.Email, dto.Email)
                     }),
                     Expires = DateTime.UtcNow.AddSeconds(dto.Time),
+                    Issuer = dto.Issuer,
+                    Audience = dto.Audience,
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                 };
                 var token = tokenHandler.CreateToken(tokenDescriptor);
