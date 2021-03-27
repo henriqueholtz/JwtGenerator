@@ -1,7 +1,9 @@
 ﻿using JwtGenerator.DTO;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -13,16 +15,11 @@ namespace JwtGenerator.Service
         {
             var response = new ResponseDTO();
             #region Validations
-            if (String.IsNullOrWhiteSpace(dto.Email))
-                response.Data += "Email is requerid. ";
-
-            if (String.IsNullOrWhiteSpace(dto.Name))
-                response.Data += "Name is requerid. ";
 
             if (String.IsNullOrWhiteSpace(dto.Key))
                 response.Data += "Key is requerid. ";
 
-            if (!(dto.Time > 0) || dto.Time > 86400)
+            if (dto.Time <= 0 || dto.Time > 86400)
                 response.Data += "Time is requerid. (between 1 and 86400). ";
 
             if (String.IsNullOrWhiteSpace(dto.Audience))
@@ -43,13 +40,25 @@ namespace JwtGenerator.Service
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(dto.Key);
 
+                List<Claim> claimsList = new List<Claim>();
+                if (!String.IsNullOrWhiteSpace(dto.Name))
+                    claimsList.Add(new Claim(ClaimTypes.Name, dto.Name));
+
+                if (!String.IsNullOrWhiteSpace(dto.Email))
+                    claimsList.Add(new Claim(ClaimTypes.Name, dto.Email));
+
+                if (dto.Claims != null && dto.Claims.Any())
+                {
+                    foreach (var claim in dto.Claims)
+                    {
+                        if (!String.IsNullOrWhiteSpace(claim.Key) && !String.IsNullOrWhiteSpace(claim.Value))
+                            claimsList.Add(new Claim(claim.Key, claim.Value));
+                    }
+                }
+
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
-                        new Claim(ClaimTypes.Name, dto.Name),
-                        new Claim(ClaimTypes.Email, dto.Email)
-                    }),
+                    Subject = new ClaimsIdentity(claimsList.ToArray()),
                     Expires = DateTime.UtcNow.AddSeconds(dto.Time),
                     Issuer = dto.Issuer,
                     Audience = dto.Audience,
