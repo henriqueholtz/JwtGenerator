@@ -20,3 +20,14 @@ This is a Web Application for generate JWT Tokens
 # How to view or edit the collection of requests ?
 
 - You can view/edit using the [Postman Collection Explorer extension](https://marketplace.visualstudio.com/items?itemName=MrCodingB.postman-collection-explorer) in Visual Studio Code
+
+# Deploy to heroku as container
+
+[Deploying .NET Core to Heroku](https://dev.to/alrobilliard/deploying-net-core-to-heroku-1lfe)
+
+- `heroku login`
+- `heroku container:login`
+- `cd JwtGenerator` (to go into the same folder that `JwtGenerator.sln` file)
+- `docker build -t jwt-generator-2022 .`
+- `heroku container:push -a jwt-generator-2022 web`
+- `heroku container:release -a jwt-generator-2022 web`
