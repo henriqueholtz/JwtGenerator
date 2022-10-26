@@ -5,8 +5,7 @@ on:
     branches: [master]
 
 jobs:
-  #https://github.com/marketplace/actions/deploy-to-heroku
-  deploy-to-heroku:
+  deploy-to-heroku: #https://github.com/marketplace/actions/deploy-to-heroku
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,3 +16,14 @@ jobs:
           heroku_email: 'henrique_holtz@hotmail.com'
           usedocker: true
           appdir: 'JwtGenerator' # <- This will point to the api folder in your project
+
+  newman-staging: #https://github.com/marketplace/actions/newman-action
+    runs-on: ubuntu-latest
+    needs: deploy-to-heroku
+    steps:
+      - uses: actions/checkout@master
+      - uses: matt-ball/newman-action@master
+        with:
+          collection: JWTGenerator.postman_collection.json
+          delayRequest: 5000
+          envVar: '[{ "key": "JwtGenerator", "value": "https://jwt-generator-2022.herokuapp.com/api" }]'
