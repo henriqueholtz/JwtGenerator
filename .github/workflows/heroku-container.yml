@@ -16,3 +16,4 @@ jobs:
           heroku_app_name: 'jwt-generator-2022' #Must be unique in Heroku
           heroku_email: 'henrique_holtz@hotmail.com'
           usedocker: true
+          appdir: 'JwtGenerator' # <- This will point to the api folder in your project
