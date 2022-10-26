@@ -13,7 +13,7 @@ namespace JwtGenerator.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            return Ok("Welcome to home endpoint of JwtGenerator! ");
+            return Ok($"Welcome to home endpoint of JwtGenerator! OSVerion: {System.Environment.OSVersion.Platform.ToString()}");
         }
     }
 }
