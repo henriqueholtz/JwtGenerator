@@ -21,7 +21,9 @@ This is a Web Application for generate JWT Tokens
 
 - You can view/edit using the [Postman Collection Explorer extension](https://marketplace.visualstudio.com/items?itemName=MrCodingB.postman-collection-explorer) in Visual Studio Code
 
-# Deploy to heroku as container
+# Deploy manually to heroku as container
+
+Note: Github actions will deploy automatically to heroku staging as container when push new commits to branch `master`
 
 [Deploying .NET Core to Heroku](https://dev.to/alrobilliard/deploying-net-core-to-heroku-1lfe)
 
