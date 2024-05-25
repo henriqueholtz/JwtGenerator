@@ -1,0 +1,21 @@
+# Use with the VS Code extension "REST Client"
+# GET Home
+GET https://localhost:44373/api/Home
+
+###
+
+# Generate your own JWT
+POST https://localhost:44373/api/Token HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "You Full Name",
+  "email": "youremail@example.com",
+  "timeIsSeconds": 600,
+  "key": "your-private-key-12345-should-be-a-secret",
+  "issuer": "https://yoursso.example.com",
+  "audience": "your-audience",
+  "claims": {
+    "claim": "1234"
+  }
+}
