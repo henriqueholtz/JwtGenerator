@@ -19,7 +19,7 @@ namespace JwtGenerator.Service
             if (String.IsNullOrWhiteSpace(dto.Key))
                 response.Data += "Key is requerid. ";
 
-            if (dto.Time <= 0 || dto.Time > 86400)
+            if (dto.TimeIsSeconds <= 0 || dto.TimeIsSeconds > 86400)
                 response.Data += "Time is requerid. (between 1 and 86400). ";
 
             if (String.IsNullOrWhiteSpace(dto.Audience))
@@ -59,7 +59,7 @@ namespace JwtGenerator.Service
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(claimsList.ToArray()),
-                    Expires = DateTime.UtcNow.AddSeconds(dto.Time),
+                    Expires = DateTime.UtcNow.AddSeconds(dto.TimeIsSeconds),
                     Issuer = dto.Issuer,
                     Audience = dto.Audience,
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

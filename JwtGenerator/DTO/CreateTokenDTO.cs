@@ -6,7 +6,7 @@ namespace JwtGenerator.DTO
     {
         public string Name { get; set; }
         public string Email { get; set; }
-        public int Time { get; set; }
+        public int TimeIsSeconds { get; set; }
         public string Key { get; set; }
         public string Issuer { get; set; }
         public string Audience { get; set; }
